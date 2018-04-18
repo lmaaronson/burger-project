@@ -1,35 +1,37 @@
-<h1> Eat da Burger</h1>
+<h1>da burger</h1>
 
-<main>
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6">
-        {{#each burgers}} {{#unless this.eaten}}
-      </div>
-      <form action="/burgers/ {{this.id}}?_method=PUT" method=POST>
-        <button type="submitt" class="burgerAvailable"> {{this.buger_name}}</button>
-      </form>
-    </div>
-    {{/unless}} {{/each}}
 
-    <div class="col-md-6">
-      {{#each burgers}} {{#if this.eaten}}
-      <div class="burgerEaten">
-        <div>
-          {{this.burger_name}}
-        </div>
-      </div>
-      {{/if}} {{/each}}
-    </div>
-  </div>
-  </div>
-</main>
+{{!-- get route part of layout to display all --}}
+{{!-- each refers to the data we are sending from burgers table --}}
+<h2>Burgers to Eat!</h2>
+<ul>
+  {{#each burgers}} 
+  {{#unless this.devoured}}
+    <li>
+      <p>{{this.burger_name}}</p>
+      {{!-- <p>{{this.id}}</p> --}}
+      <button type="submit" class="eat-da-burger" data-id={{this.id}} >Eat da burger</button>  
+      {{!-- //this.id, pulls in the id of the burger --}}
+    </li>
+  {{/unless}}
+  {{/each}}
+</ul>
 
-<div class="row">
-  <div class="col-md-12">
-    <form action="/bugers" method="POST">
-    <input type ="text" id ="name" name= "burger_name" placeholder: "This is the best BURGER EVER">
-      <button type ="submit" class ="addBurgerButton"> Add the Burger</button>
-    </form>
-  </div>
+<h2>Burgers Eaten!</h2>
+<ul>
+  {{#each burgers}}
+  {{#if this.devoured}}
+    <li>
+      <p>{{this.burger_name}}</p>
+    </li>
+  {{/if}}
+  {{/each}}
+</ul>
+
+
+<div>
+  {{!-- <form action"/burgers" method="POST"> --}}
+    <textarea id="newBurgerName" type ="text" name="burger"></textarea>
+    <button id="newBurgerButton" type="submit">Create New Burger</button>
+  {{!-- </form> --}}
 </div>

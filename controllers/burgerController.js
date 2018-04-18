@@ -6,37 +6,40 @@ var router = express.Router();
 var burger = require('../models/burger.js');
 
 //create the routes and logic for all to communicate properly
-// go to the indec page and render all the burgers to the DOM
-router.get('/', function (require, respond){
+// go to the index page and render all the burgers to the DOM
+
+router.get('/', function (request, response){
   burger.selectAll(function(data){
     var burgerObject = {
-      bugers: data
+      burgers: data    //eaching through this from DB
     }; 
     console.log(burgerObject)
-    res.render('index', burgerObject)
+    response.render('index', burgerObject)   //passes the info from the DB and send to the front end
   });
 });
 
 
 //  create a new burger
-router.post("bugers", function(require, respond) {
-  buger.insertOne (["burger_ name"],
-    [req.body.burger_name], 
+//only happens if the button is clicked 
+router.post("/burgers", function(request, response) {
+  console.log(request.body)
+  burger.insertOne (["burger_name"],
+    [request.body.burger_name, 0], // 0 represents not devaoured
   
   function(data){
-    respond.redirect ("/");
+    console.log("we are in the callback of the burger.insertOne function")
+    
+    response.send(data);
   });
 });
 
 
 //  eat a burger
-router.put("/burgers/:id", function (require, respond){
-  var condition = "id = " + req.params.id;
-
-  burger.updateOne({
-    eaten: true
-  }, condition, function(data) {
-    respond.redirect("/");
+router.put("/burgers/:id", function (request, response){
+  var condition = "id = " + request.params.id;
+  console.log(request.params)
+  burger.updateOne("devoured=true", condition, function(data) {
+    response.send(data);
   });
 });
 

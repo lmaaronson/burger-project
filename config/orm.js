@@ -1,5 +1,5 @@
 // Import MySQL connection.
-var connection = require("../config/connection.js");
+var connection = require("./connection.js");
 
 // Helper function for SQL syntax.
 // EXAMPLE: Let's say we want to pass 3 values into the mySQL query.
@@ -22,7 +22,8 @@ var connection = require("../config/connection.js");
 function objectToSQL(object) {
   var arr = [];
 
-
+}
+  
   // loop through the keys and push the key/value as a string int arr
 //   for (var key in object) {
 //     var value = object[key];
@@ -46,14 +47,7 @@ function objectToSQL(object) {
 
 
 
-//connect to MySQL database
-connection.connect(function(error){
-  if (error){
-    console.log("error :connecting " + error.stack);
-    return;
-  };
-  console.log("connect as id " + connection.threadIdID);
-})
+
 
 
 
@@ -61,7 +55,7 @@ connection.connect(function(error){
 // methods for MYSQL commands, create the ORM object to perfomr the queries in SQL
 var orm = {
 
-  selectALL: function(callback){ // callback function for retn all
+  selectAll: function(tableInput, callback){ // callback function for retn all
     
     //run mysql query 
     connection.query("SELECT * FROM burgers", function (error, result){
@@ -80,10 +74,9 @@ var orm = {
     var queryString = "INSERT INTO " + table;
 
     queryString += " (";
-    queryString += cols.toString();
-    queryString += ") ";
-    queryString += "VALUES (";
-    queryString += printQuestionMarks(vals.length);
+    queryString += columns.toString();
+    queryString += ", devoured) ";
+    queryString += "VALUES (?, ?";  //the ? represent the one value from the controller 
     queryString += ") ";
 
     console.log(queryString);
@@ -104,7 +97,7 @@ var orm = {
     var queryString = "UPDATE " + table;
 
     queryString += " SET ";
-    queryString += objToSql(objColVals);
+    queryString += objColVals;
     queryString += " WHERE ";
     queryString += condition;
 
@@ -119,9 +112,7 @@ var orm = {
       //return callback
       callback(result);
     });
-  }}
+  }
 };
 
-
-// Export the orm object for the model (burger.js).
 module.exports = orm;
